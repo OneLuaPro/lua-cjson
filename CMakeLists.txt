@@ -36,6 +36,10 @@ endif()
 # <prefix>/share/cmake/liblua.
 
 # ------------------------------------------------------------------------------
+# Extras to be compatible with original CMakeLists-file
+set(LUA_LIBRARY "${LIBLUA_LIBDIR}/liblua.lib")
+
+# ------------------------------------------------------------------------------
 # Setup GNU-alike installatin directories
 include (GNUInstallDirs)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
