@@ -97,11 +97,11 @@
 #define DEFAULT_DECODE_INVALID_NUMBERS 0
 #endif
 
-#ifdef _MSC_VER
-/* Microsoft C compiler lacks strncasecmp and strcasecmp. */
-#define strncasecmp _strnicmp
-#define strcasecmp _stricmp
-#endif
+/* #ifdef _MSC_VER */
+/* /\* Microsoft C compiler lacks strncasecmp and strcasecmp. *\/ */
+/* #define strncasecmp _strnicmp */
+/* #define strcasecmp _stricmp */
+/* #endif */
 
 #if LONG_MAX > ((1UL << 31) - 1)
 #define json_lightudata_mask(ludata)                                         \

@@ -3,8 +3,8 @@
 #       Unix: export LUA_DIR=/home/user/pkg
 #       Windows: set LUA_DIR=c:\lua51
 
+cmake_minimum_required(VERSION 3.31 FATAL_ERROR)
 project(lua-cjson C)
-cmake_minimum_required(VERSION 2.8.12)
 
 option(USE_INTERNAL_FPCONV "Use internal strtod() / g_fmt() code for performance")
 option(MULTIPLE_THREADS "Support multi-threaded apps with internal fpconv - recommended" ON)
@@ -15,8 +15,49 @@ if(NOT CMAKE_BUILD_TYPE)
         FORCE)
 endif()
 
-find_package(Lua REQUIRED)
-include_directories(${LUA_INCLUDE_DIR})
+# ------------------------------------------------------------------------------
+# find liblua installation and version info
+if(NOT LUA_HINTS)
+  if(WIN32)
+    set(LUA_HINTS "c:/Apps")
+  endif()
+endif()
+find_package(liblua REQUIRED CONFIG HINTS ${LUA_HINTS})
+if(liblua_FOUND)
+  message(STATUS "liblua version        : ${liblua_VERSION}")
+  message(STATUS "liblua install prefix : ${LIBLUA_INSTALLDIR}")
+  message(STATUS "liblua include dir    : ${LIBLUA_INCLUDEDIR}")
+  message(STATUS "liblua lib dir        : ${LIBLUA_LIBDIR}")
+else()
+  message(FATAL_ERROR "Unable to find liblua version ${liblua_VERSION}.")
+endif()
+# Note: liblua_VERSION is set by find_package() directly. LIBLUA_INSTALLDIR,
+# LIBLUA_INCLUDEDIR and LIBLUA_LIBDIR are set by libluaConfigVersion.cmake in
+# <prefix>/share/cmake/liblua.
+
+# ------------------------------------------------------------------------------
+# Setup GNU-alike installatin directories
+include (GNUInstallDirs)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+set(INSTALL_LIBDIR
+  ${CMAKE_INSTALL_LIBDIR} CACHE PATH "Installation directory for libraries")
+set(INSTALL_BINDIR
+  ${CMAKE_INSTALL_BINDIR} CACHE PATH "Installation directory for executables")
+set(INSTALL_INCLUDEDIR
+  ${CMAKE_INSTALL_INCLUDEDIR} CACHE PATH "Installation directory for header files")
+set(INSTALL_DOCDIR
+  ${CMAKE_INSTALL_DOCDIR} CACHE PATH "Installation directory for documentation")
+set(INSTALL_MANDIR
+  ${CMAKE_INSTALL_MANDIR} CACHE PATH "Installation directory for manpages")
+set(INSTALL_DATAROOTDIR
+  ${CMAKE_INSTALL_DATAROOTDIR} CACHE PATH "Installation directory for data")
+# Lua-specific installation dirs
+set(INSTALL_TOP_CDIR
+  ${INSTALL_LIBDIR}/lua/${liblua_VERSION_MAJOR}.${liblua_VERSION_MINOR})
+set(INSTALL_TOP_LDIR
+  ${INSTALL_DATAROOTDIR}/lua/${liblua_VERSION_MAJOR}.${liblua_VERSION_MINOR})
 
 if(NOT USE_INTERNAL_FPCONV)
     # Use libc number conversion routines (strtod(), sprintf())
@@ -71,13 +112,17 @@ endif()
 if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
     add_definitions(-Dinline=__inline)
-    add_definitions(-Dsnprintf=_snprintf)
-    add_definitions(-Dstrncasecmp=_strnicmp)
+    #add_definitions(-Dsnprintf=_snprintf)
+    #add_definitions(-Dstrncasecmp=_strnicmp)
 endif()
 
-add_library(cjson MODULE lua_cjson.c strbuf.c ${FPCONV_SOURCES})
+add_library(cjson SHARED lua_cjson.c strbuf.c ${FPCONV_SOURCES})
+target_include_directories(cjson PRIVATE ${LIBLUA_INCLUDEDIR})
 set_target_properties(cjson PROPERTIES PREFIX "")
 target_link_libraries(cjson ${_MODULE_LINK})
-install(TARGETS cjson DESTINATION "${_lua_module_dir}")
+install(TARGETS cjson RUNTIME DESTINATION ${INSTALL_TOP_CDIR})
+install(DIRECTORY lua/cjson DESTINATION ${INSTALL_TOP_LDIR})
+install(DIRECTORY tests DESTINATION ${INSTALL_DOCDIR})	# "/" omits leading dir
+install(DIRECTORY doc/ DESTINATION ${INSTALL_DOCDIR})	# "/" omits leading dir
 
 # vi:ai et sw=4 ts=4:

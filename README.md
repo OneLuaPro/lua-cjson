@@ -21,15 +21,7 @@ Table of Contents
 Description
 ===========
 
-This fork of [mpx/lua-cjson](https://github.com/mpx/lua-cjson) is included in
-the [OpenResty](https://openresty.org/) bundle and includes a few bugfixes and
-improvements, especially to facilitate the encoding of empty tables as JSON Arrays.
-
-Please refer to the [lua-cjson documentation](https://kyne.au/~mark/software/lua-cjson.php)
-for standard usage, this README only provides informations regarding this fork's additions.
-
-See [`mpx/master..openresty/master`](https://github.com/mpx/lua-cjson/compare/master...openresty:master)
-for the complete history of changes.
+This fork of [mpx/lua-cjson](https://github.com/mpx/lua-cjson) is included in the [OpenResty](https://openresty.org/) bundle and includes a few bugfixes and improvements, especially to facilitate the encoding of empty tables as JSON Arrays. Please refer to the [lua-cjson documentation](https://kyne.au/~mark/software/lua-cjson.php) for standard usage, this README only provides informations regarding this fork's additions. See [`mpx/master..openresty/master`](https://github.com/mpx/lua-cjson/compare/master...openresty:master) for the complete history of changes.
 
 [Back to TOC](#table-of-contents)
 
@@ -40,12 +32,7 @@ encode_empty_table_as_object
 ----------------------------
 **syntax:** `cjson.encode_empty_table_as_object(true|false|"on"|"off")`
 
-Change the default behavior when encoding an empty Lua table.
-
-By default, empty Lua tables are encoded as empty JSON Objects (`{}`). If this is set to false,
-empty Lua tables will be encoded as empty JSON Arrays instead (`[]`).
-
-This method either accepts a boolean or a string (`"on"`, `"off"`).
+Change the default behavior when encoding an empty Lua table. By default, empty Lua tables are encoded as empty JSON Objects (`{}`). If this is set to false, empty Lua tables will be encoded as empty JSON Arrays instead (`[]`). This method either accepts a boolean or a string (`"on"`, `"off"`).
 
 [Back to TOC](#table-of-contents)
 
@@ -53,10 +40,7 @@ empty_array
 -----------
 **syntax:** `cjson.empty_array`
 
-A lightuserdata, similar to `cjson.null`, which will be encoded as an empty JSON Array by
-`cjson.encode()`.
-
-For example, since `encode_empty_table_as_object` is `true` by default:
+A lightuserdata, similar to `cjson.null`, which will be encoded as an empty JSON Array by `cjson.encode()`. For example, since `encode_empty_table_as_object` is `true` by default:
 
 ```lua
 local cjson = require "cjson"
@@ -84,10 +68,7 @@ array_mt
 --------
 **syntax:** `setmetatable({}, cjson.array_mt)`
 
-When lua-cjson encodes a table with this metatable, it will systematically
-encode it as a JSON Array. The resulting, encoded Array will contain the array
-part of the table, and will be of the same length as the `#` operator on that
-table. Holes in the table will be encoded with the `null` JSON value.
+When lua-cjson encodes a table with this metatable, it will systematically encode it as a JSON Array. The resulting, encoded Array will contain the array part of the table, and will be of the same length as the `#` operator on that table. Holes in the table will be encoded with the `null` JSON value.
 
 Example:
 
@@ -117,8 +98,7 @@ empty_array_mt
 --------------
 **syntax:** `setmetatable({}, cjson.empty_array_mt)`
 
-A metatable which can "tag" a table as a JSON Array in case it is empty (that is, if the
-table has no elements, `cjson.encode()` will encode it as an empty JSON Array).
+A metatable which can "tag" a table as a JSON Array in case it is empty (that is, if the table has no elements, `cjson.encode()` will encode it as an empty JSON Array).
 
 Instead of:
 
@@ -178,8 +158,7 @@ encode_skip_unsupported_value_types
 
 **default:** false
 
-If enabled, cjson will not throw exception when there are unsupported types
-in the Lua table.
+If enabled, cjson will not throw exception when there are unsupported types in the Lua table.
 
 For example:
 
@@ -207,13 +186,9 @@ decode_array_with_array_mt
 
 **default:** false
 
-If enabled, JSON Arrays decoded by `cjson.decode` will result in Lua
-tables with the [`array_mt`](#array_mt) metatable. This can ensure a 1-to-1
-relationship between arrays upon multiple encoding/decoding of your
-JSON data with this module.
+If enabled, JSON Arrays decoded by `cjson.decode` will result in Lua tables with the [`array_mt`](#array_mt) metatable. This can ensure a 1-to-1 relationship between arrays upon multiple encoding/decoding of your JSON data with this module.
 
-If disabled, JSON Arrays will be decoded to plain Lua tables, without
-the `array_mt` metatable.
+If disabled, JSON Arrays will be decoded to plain Lua tables, without the `array_mt` metatable.
 
 The `enabled` argument is a boolean.
 
