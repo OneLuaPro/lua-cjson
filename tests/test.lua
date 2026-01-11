@@ -63,7 +63,7 @@ function load_testdata()
     
     -- Load matching data for utf16_escaped
     local utf8_loaded
-    utf8_loaded, data.utf8_raw = pcall(util.file_load, "utf8.dat")
+    utf8_loaded, data.utf8_raw = pcall(util.file_load, os.getenv("TEMP").."utf8.dat")
     if not utf8_loaded then
         data.utf8_raw = "Failed to load utf8.dat - please run genutf8.pl"
     end

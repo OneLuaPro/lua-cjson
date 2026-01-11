@@ -3,7 +3,7 @@
 
 -- The generated utf8.dat file must have the following MD5 sum:
 --       cff03b039d850f370a7362f3313e5268
-local filename = "utf8.dat"
+local filename = os.getenv("TEMP").."utf8.dat"
 
 -- Funktion zur Generierung der Codepoints (unter Ausschluss der Surrogates D800-DFFF)
 local function generate_utf8_data()
