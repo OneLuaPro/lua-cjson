@@ -58,6 +58,9 @@ function load_testdata()
     -- Data for \uXXXX -> UTF-8 test
     data.utf16_escaped = gen_utf16_escaped()
 
+    -- create utf8.dat
+    dofile("genutf8.lua")
+    
     -- Load matching data for utf16_escaped
     local utf8_loaded
     utf8_loaded, data.utf8_raw = pcall(util.file_load, "utf8.dat")
