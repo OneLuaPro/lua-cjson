@@ -16,9 +16,9 @@ else
 fi
 
 git checkout master
-git pull origin master
-git fetch $rn
+git pull origin master --tags
+git fetch $rn --tags
 git merge $rn/master
-git push origin master
+git push origin master --tags
 
 read -p "Press enter to close window"
