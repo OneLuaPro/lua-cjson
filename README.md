@@ -18,6 +18,7 @@ Table of Contents
     * [encode_skip_unsupported_value_types](#encode_skip_unsupported_value_types)
     * [encode_indent](#encode_indent)
     * [decode_array_with_array_mt](#decode_array_with_array_mt)
+    * [decode_allow_comment](#decode_allow_comment)
 
 Description
 ===========
@@ -235,5 +236,18 @@ local my_json = [[{"my_array":[]}]]
 local t = cjson.decode(my_json)
 cjson.encode(t) -- {"my_array":[]} properly re-encoded as an array
 ```
+
+[Back to TOC](#table-of-contents)
+
+decode_allow_comment
+--------------------------
+**syntax:** `cjson.decode_allow_comment(enabled)`
+
+**default:** false
+
+If enabled, allows JavaScript-style comments in `cjson.decode` input. Comments
+are treated as whitespace and may appear anywhere whitespace is valid in JSON.
+Supports single-line comments beginning with '//' and block comments enclosed
+with '/* ... */'.
 
 [Back to TOC](#table-of-contents)

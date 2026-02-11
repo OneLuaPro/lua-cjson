@@ -86,7 +86,7 @@ static inline void debug_stats(strbuf_t *s)
 {
     if (s->debug) {
         fprintf(stderr, "strbuf(%p) reallocs: %d, length: %zd, size: %zd\n",
-                (void*)s, s->reallocs, s->length, s->size);
+                (void *) s, s->reallocs, s->length, s->size);
     }
 }
 
@@ -165,7 +165,7 @@ void strbuf_resize(strbuf_t *s, size_t len)
 
     if (s->debug > 1) {
         fprintf(stderr, "strbuf(%p) resize: %zd => %zd\n",
-                (void*)s, s->size, newsize);
+                (void *) s, s->size, newsize);
     }
 
     s->size = newsize;
