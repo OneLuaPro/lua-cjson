@@ -233,7 +233,7 @@ local function run_test(testname, func, input, should_work, output)
     for k in pairs(input) do
        if type(k) == "number" and k > input_len then input_len = k end
     end
-    local tmp = { pcall(func, table.unpack(input, 1, input_len)) }
+    local tmp = { pcall(func, unpack(input, 1, input_len)) }
     -----------------------------------------------------------
     -- does not work with Lua 5.5.0
     -- local tmp = { pcall(func, unpack(input)) }
