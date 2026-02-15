@@ -99,12 +99,6 @@
 #define DEFAULT_DECODE_INVALID_NUMBERS 0
 #endif
 
-/* #ifdef _MSC_VER */
-/* /\* Microsoft C compiler lacks strncasecmp and strcasecmp. *\/ */
-/* #define strncasecmp _strnicmp */
-/* #define strcasecmp _stricmp */
-/* #endif */
-
 #if LONG_MAX > ((1UL << 31) - 1)
 #define json_lightudata_mask(ludata)                                         \
     ((void *) ((uintptr_t) (ludata) & ((1UL << 47) - 1)))
@@ -114,7 +108,9 @@
 #endif
 
 #if LUA_VERSION_NUM >= 502
+#ifndef lua_objlen
 #define lua_objlen(L,i)		luaL_len(L, (i))
+#endif
 #endif
 
 static const char * const *json_empty_array;
